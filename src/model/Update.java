@@ -24,7 +24,7 @@ public class Update implements Serializable {
     @Override
     public String toString() {
         return "Update{" +
-                "message=" + message +
+                "message_type=" + message +
                 ", id=" + id +
                 '}';
     }

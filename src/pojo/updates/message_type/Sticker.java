@@ -1,10 +1,12 @@
-package pojo.updates;
-
-import java.io.Serializable;
+package pojo.updates.message_type;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import pojo.updates.MaskPosition;
+import pojo.updates.Thumb;
+
+import java.io.Serializable;
 
 public class Sticker implements Serializable {
     private final static long serialVersionUID = 7174164000068710591L;

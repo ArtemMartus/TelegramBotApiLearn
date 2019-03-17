@@ -1,4 +1,4 @@
-package pojo.updates;
+package pojo.updates.message_type;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Objects;
 
+@SuppressWarnings("WeakerAccess")
 public class Video implements Serializable {
     private final static long serialVersionUID = 801223434469944357L;
     /*

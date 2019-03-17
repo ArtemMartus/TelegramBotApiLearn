@@ -4,9 +4,6 @@ import model.Message;
 import model.Update;
 import model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UpdateProcessor {
     public UpdateProcessor() {
     }

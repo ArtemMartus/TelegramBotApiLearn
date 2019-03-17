@@ -1,13 +1,29 @@
 package pojo.updates;
 
-import java.io.Serializable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import pojo.updates.message_type.ChatPhoto;
+
+import java.io.Serializable;
 
 public class Chat implements Serializable {
+    /*
+    Done
 
+    id 	Integer 	Unique identifier for this chat. This number may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+    type 	String 	Type of chat, can be either “private”, “group”, “supergroup” or “channel”
+    title 	String 	Optional. Title, for supergroups, channels and group chats
+    username 	String 	Optional. Username, for private chats, supergroups and channels if available
+    first_name 	String 	Optional. First name of the other party in a private chat
+    last_name 	String 	Optional. Last name of the other party in a private chat
+    all_members_are_administrators 	Boolean 	Optional. True if a group has ‘All Members Are Admins’ enabled.
+    photo 	ChatPhoto 	Optional. Chat photo. Returned only in getChat.
+    description 	String 	Optional. Description, for supergroups and channel chats. Returned only in getChat.
+    invite_link 	String 	Optional. Chat invite link, for supergroups and channel chats. Each administrator in a chat generates their own invite links, so the bot must first generate the link using exportChatInviteLink. Returned only in getChat.
+    pinned_message 	Message 	Optional. Pinned message, for supergroups and channel chats. Returned only in getChat.
+    sticker_set_name 	String 	Optional. For supergroups, name of group sticker set. Returned only in getChat.
+    can_set_sticker_set 	Boolean 	Optional. True, if the bot can change the group sticker set. Returned only in getChat.
+     */
     private final static long serialVersionUID = 4026320423182010145L;
     @SerializedName("id")
     @Expose
@@ -32,7 +48,7 @@ public class Chat implements Serializable {
     private Boolean all_members_are_administrators;
     @SerializedName("photo")
     @Expose
-    private Photo photo;
+    private ChatPhoto photo;
     @SerializedName("description")
     @Expose
     private String description;
@@ -49,21 +65,7 @@ public class Chat implements Serializable {
     @Expose
     private Boolean can_set_sticker_set;
 
-    public Chat(Long id, String type, String title, String username, String firstName, String lastName, Boolean all_members_are_administrators, Photo photo, String description, String invite_link, Message pinned_message, String sticker_set_name, Boolean can_set_sticker_set) {
-        this.id = id;
-        this.type = type;
-        this.title = title;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.all_members_are_administrators = all_members_are_administrators;
-        this.photo = photo;
-        this.description = description;
-        this.invite_link = invite_link;
-        this.pinned_message = pinned_message;
-        this.sticker_set_name = sticker_set_name;
-        this.can_set_sticker_set = can_set_sticker_set;
-    }
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -130,11 +132,11 @@ public class Chat implements Serializable {
         this.all_members_are_administrators = all_members_are_administrators;
     }
 
-    public Photo getPhoto() {
+    public ChatPhoto getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Photo photo) {
+    public void setPhoto(ChatPhoto photo) {
         this.photo = photo;
     }
 

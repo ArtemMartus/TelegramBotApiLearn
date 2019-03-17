@@ -1,12 +1,14 @@
-package pojo.updates;
+package pojo.updates.message_type;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import pojo.updates.MessageEntity;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("ALL")
 public class Game implements Serializable {
     /*
 
@@ -14,10 +16,10 @@ public class Game implements Serializable {
 
 title 	String 	Title of the game
 description 	String 	Description of the game
-photo 	Array of PhotoSize 	Photo that will be displayed in the game message in chats.
-text 	String 	Optional. Brief description of the game or high scores included in the game message. Can be automatically edited to include current high scores for the game when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
+photo 	Array of PhotoSize 	Photo that will be displayed in the game message_type in chats.
+text 	String 	Optional. Brief description of the game or high scores included in the game message_type. Can be automatically edited to include current high scores for the game when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
 text_entities 	Array of MessageEntity 	Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
-animation 	Animation 	Optional. Animation that will be displayed in the game message in chats. Upload via BotFather
+animation 	Animation 	Optional. Animation that will be displayed in the game message_type in chats. Upload via BotFather
      */
 
     private final static long serialVersionUID = -5597723503666975L;

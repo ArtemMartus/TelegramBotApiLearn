@@ -29,11 +29,9 @@ public class SqliteAdapter {
             //stmt.executeUpdate("DROP TABLE  active_users");
             //stmt.executeUpdate("DROP TABLE  messages");
 
-            String sql = "CREATE TABLE IF NOT EXISTS active_users " +
-                    "(ID INT NOT NULL UNIQUE,DATA TEXT NOT NULL,ORDERS TEXT)";
+            String sql = "CREATE TABLE IF NOT EXISTS active_users (ID INT NOT NULL UNIQUE,DATA TEXT NOT NULL,ORDERS TEXT)";
             stmt.executeUpdate(sql);
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS messages (ID INT NOT NULL UNIQUE,DATA TEXT NOT NULL," +
-                    "USER INTEGER NOT NULL)");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS messages (ID INT NOT NULL UNIQUE,DATA TEXT NOT NULL,USER INTEGER NOT NULL)");
             System.out.println("Table active_users and messages opened successfully");
 
             stmt.close();
@@ -66,8 +64,8 @@ public class SqliteAdapter {
     }
 
     public User loadUser(Long id) {
-        User user = null;
-        Statement stmt = null;
+        User user;
+        Statement stmt;
         String data = null;
         try {
             stmt = c.createStatement();
@@ -99,8 +97,8 @@ public class SqliteAdapter {
     }
 
     public List<Order> loadOrders(Long userId) {
-        List<Order> order = null;
-        Statement stmt = null;
+        List<Order> order;
+        Statement stmt;
         String data = null;
         try {
             stmt = c.createStatement();
@@ -121,6 +119,7 @@ public class SqliteAdapter {
             return null;
         }
         try {
+            //noinspection unchecked
             order = (List<Order>) fromString(data);
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +132,7 @@ public class SqliteAdapter {
     }
 
     public boolean saveUser(User user, List<Order> orders) {
-        Statement stmt = null;
+        Statement stmt;
         try {
             System.out.println("Inserting...");
             stmt = c.createStatement();
@@ -153,7 +152,7 @@ public class SqliteAdapter {
     }
 
     public boolean updateUser(User user, List<Order> orders) {
-        Statement stmt = null;
+        Statement stmt;
         try {
             System.out.println("Updating user " + user.getId());
             stmt = c.createStatement();
@@ -171,10 +170,10 @@ public class SqliteAdapter {
         return true;
     }
 
-    public boolean updateMessage(Message message) {
-        Statement stmt = null;
+    public void updateMessage(Message message) {
+        Statement stmt;
         try {
-            System.out.println("Updating message " + message.getId());
+            System.out.println("Updating message_type " + message.getId());
             stmt = c.createStatement();
             String sql = "UPDATE messages set DATA = '" + toString(message) + "' where ID='" + message.getId() + "'";
             stmt.executeUpdate(sql);
@@ -185,16 +184,14 @@ public class SqliteAdapter {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public Message loadMessage(Long messageId) {
-        Message message = null;
-        Statement stmt = null;
+        Message message;
+        Statement stmt;
         String data = null;
-        Long userId = null;
+        Long userId;
         try {
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM messages WHERE ID=" + messageId.toString());
@@ -221,15 +218,15 @@ public class SqliteAdapter {
             return null;
         }
 
-        System.out.println("Loading message done successfully");
+        System.out.println("Loading message_type done successfully");
         System.out.println("Message from " + message.getFrom().getUsername() + " loaded successfully");
         return message;
     }
 
     public List<Message> loadMessagesFromUserWith(Long userId) {
         List<Message> messages = new ArrayList<>();
-        Statement stmt = null;
-        String data = null;
+        Statement stmt;
+        String data;
         try {
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM messages WHERE USER=" + userId);
@@ -260,8 +257,8 @@ public class SqliteAdapter {
         return messages;
     }
 
-    public boolean saveMessage(Message message) {
-        Statement stmt = null;
+    public void saveMessage(Message message) {
+        Statement stmt;
         try {
             System.out.println("Inserting...");
             stmt = c.createStatement();
@@ -275,8 +272,6 @@ public class SqliteAdapter {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 }

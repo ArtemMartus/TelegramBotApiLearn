@@ -4,21 +4,20 @@ import processing.Bot;
 import processing.UpdateProcessor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+@SuppressWarnings("ALL")
 public class Main {
 
     public static void main(String[] args) {
         final String token = "646115516:AAHvFbiUdH4h1nUE_2-z3VwpUETcLFkl53I";
         SqliteAdapter database = new SqliteAdapter();
 
+
         Bot bot = new Bot(token);
         UpdateProcessor processor = new UpdateProcessor();
 
         List<Update> updates = bot.getUpdates();
-        Set<User> users = new HashSet<>();
         List<Message> messages = new ArrayList<>();
 
         if (updates == null) {
@@ -26,11 +25,10 @@ public class Main {
         } else {
             for (Update upd : updates) {
 
-                users.add(processor.extractUsers(upd));
                 messages.add(processor.extractMessage(upd));
 
                 System.out.println("Update №" + upd.getId());
-                System.out.println("\tGot message[" + upd.getMessage().getId() + "] " + Bot.unixToString(upd.getMessage().getDate()));
+                System.out.println("\tGot message_type[" + upd.getMessage().getId() + "] " + Bot.unixToString(upd.getMessage().getDate()));
                 System.out.println("\tUser " + upd.getMessage().getFrom().getUsername());
                 if (upd.getMessage().getRepliedTo() != null) {
                     Message repl = upd.getMessage().getRepliedTo();
@@ -54,9 +52,9 @@ public class Main {
                     System.out.println("\tText " + text);
                 }
 
-                if (upd.getMessage().getEntities().size() > 0) {
+                if (upd.getMessage().getEntities() != null && upd.getMessage().getEntities().size() > 0) {
                     StringBuilder sb = new StringBuilder();
-                    for (Entity ent :
+                    for (MessageEntity ent :
                             upd.getMessage().getEntities()) {
                         if (ent.getUrl() != null) {
                             sb.append(ent.getText()).append("->[");
@@ -70,16 +68,16 @@ public class Main {
         }
 
         for (Message msg : messages) {
-            System.out.println("\tLooking at message with id of " + msg.getId());
+            System.out.println("\tLooking at message_type with id of " + msg.getId());
             Message message = database.loadMessage(msg.getId());
 
 
             if (message == null) {
-                System.out.println("Could not find such message in database. Adding...");
+                System.out.println("Could not find such message_type in database. Adding...");
                 database.saveMessage(msg);
             } else {
                 if (!message.equals(msg)) {
-                    System.out.println("Patching old message...");
+                    System.out.println("Patching old message_type...");
                     System.out.println(message.getText() + " -> " + msg.getText());
                     database.updateMessage(msg);
                 } else {

@@ -2,7 +2,9 @@ package processing;
 
 import com.google.gson.Gson;
 import pojo.GetMe;
-import pojo.updates.*;
+import pojo.updates.Message;
+import pojo.updates.Result;
+import pojo.updates.Update;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,11 +16,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Class that handles bot api calls
+ */
 public class Bot {
     private final String token;
-    private Gson gson;
+    private final Gson gson;
+    /**
+     * Basic information about bot
+     * whose token we are using
+     */
+    @SuppressWarnings("FieldCanBeLocal")
     private GetMe botInfo;
 
+    /**
+     * @param token Token you've got from BotFather
+     */
     public Bot(String token) {
         this.token = token;
         gson = new Gson();
@@ -37,12 +50,25 @@ public class Bot {
         }
     }
 
+    /**
+     * @param unix Unix timestamp that will be converted to human readable date
+     * @return [String] human readable date
+     */
     public static String unixToString(Long unix) {
         Date date = new Date(unix * 1000);
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         return df.format(date);
     }
 
+
+    /**
+     * @param name
+     * Run telegram/token/(name)
+     * @return
+     * JSON answer as String
+     * @throws Exception
+     * Exceptions about Internet and I\O
+     */
     private String runFunction(String name) throws Exception {
         URL url = new URL("https://api.telegram.org/bot" + token + "/" + name);
         URLConnection connection = url.openConnection();
@@ -55,6 +81,10 @@ public class Bot {
 
     }
 
+    /**
+     * @return
+     * Returns JSON from runFunction("getUpdates")
+     */
     private Update getUpdate() {
         try {
             return gson.fromJson(runFunction("getUpdates"), Update.class);
@@ -64,99 +94,31 @@ public class Bot {
         }
     }
 
-    private List<model.Entity> findEntities(Message message) {
+    /*private List<model.MessageEntity> findEntities(Message message) {
         List<MessageEntity> entities = message.getEntities();
-        List<model.Entity> ret = new ArrayList<>();
+        List<model.MessageEntity> ret = new ArrayList<>();
 
         if (entities != null)
             for (MessageEntity entity : entities) {
-                model.Entity ent = new model.Entity(
+                model.MessageEntity ent = new model.MessageEntity(
                         message.getText().substring(entity.getOffset(), entity.getOffset() + entity.getLength()),
                         entity.getType(),
-                        entity.getUrl()
+                        entity.getUrl(),
+                        entity.getUser()
                 );
                 ret.add(ent);
             }
         return ret;
-    }
+    }*/
 
+    /**
+     * @param message  Filled Message POJO from JSON
+     * @param updateId Current update Id to correctly form model.Update
+     * @return model.Update Filled object
+     */
     private model.Update pushUpdate(Message message, Long updateId) {
-        List<model.Entity> entities = findEntities(message);
 
-
-        model.User from = new model.User(
-                message.getFrom().isIsBot(),
-                message.getChat().getFirstName(),
-                message.getChat().getLastName(),
-                message.getChat().getUsername(),
-                message.getFrom().getId(),
-                message.getFrom().getLanguageCode(),
-                message.getChat().getType()
-        );
-
-        model.User forwardedFrom = null;    //Initialize forwarded from person DATA
-        if (message.getForwardFrom() != null) {
-            User forwardedFromUser = message.getForwardFrom();
-            forwardedFrom = new model.User(
-                    forwardedFromUser.isIsBot(),
-                    forwardedFromUser.getFirstName(),
-                    forwardedFromUser.getLastName(),
-                    forwardedFromUser.getUsername(),
-                    forwardedFromUser.getId(),
-                    message.getFrom().getLanguageCode(),
-                    message.getChat().getType()
-            );
-        }
-
-        model.Chat forwardedFromChat = null;    //Initialize forwarded from chat DATA
-        if (message.getForwardFromChat() != null) {
-            Chat forwardedChat = message.getForwardFromChat();
-            forwardedFromChat = new model.Chat(
-                    forwardedChat.getType(),
-                    forwardedChat.getUsername(),
-                    forwardedChat.getId(),
-                    forwardedChat.getTitle()
-            );
-        }
-
-        model.Message repliedTo = null;     //Get reply details
-        if (message.getReplyToMessage() != null) {
-            Message replyToMessage = message.getReplyToMessage();
-            //Look for commands or hashtags inside replied message
-            List<model.Entity> repliedEntities = findEntities(replyToMessage);
-
-            model.User personWhoSaidThat = new model.User(
-                    replyToMessage.getFrom().isIsBot(),
-                    replyToMessage.getFrom().getFirstName(),
-                    replyToMessage.getChat().getLastName(),
-                    replyToMessage.getChat().getUsername(),
-                    replyToMessage.getFrom().getId(),
-                    replyToMessage.getFrom().getLanguageCode(),
-                    replyToMessage.getChat().getType()
-            );
-
-            repliedTo = new model.Message(
-                    replyToMessage.getText(),
-                    replyToMessage.getDate(),
-                    replyToMessage.getMessageId(),
-                    repliedEntities,
-                    personWhoSaidThat,
-                    null,
-                    null,
-                    null
-            );
-        }
-
-        model.Message updMessage = new model.Message(
-                message.getText(),
-                message.getDate(),
-                message.getMessageId(),
-                entities,
-                from,
-                forwardedFrom,
-                repliedTo,
-                forwardedFromChat
-        );
+        model.Message updMessage = new model.Message(message);
 
         return new model.Update(
                 updMessage,
@@ -164,10 +126,14 @@ public class Bot {
         );
     }
 
+
+    /**
+     * @return
+     * List of updates we got from server
+     */
     public List<model.Update> getUpdates() {
         Update upd = getUpdate();
         System.out.println("Got updates. Parsing...");
-        //System.out.println(upd);
 
         List<model.Update> updates = new ArrayList<>();
 
@@ -178,16 +144,16 @@ public class Bot {
 
             if (res.getMessage() == null && res.getEditedMessage() != null) {
 
-                System.out.println("Update " + res.getUpdateId() + " contains edited message");
+                System.out.println("Update " + res.getUpdateId() + " contains edited message_type");
                 updates.add(pushUpdate(res.getEditedMessage(), res.getUpdateId()));
 
             } else if (res.getMessage() != null) {
 
-                System.out.println("Update " + res.getUpdateId() + " has message");
+                System.out.println("Update " + res.getUpdateId() + " has message_type");
                 updates.add(pushUpdate(res.getMessage(), res.getUpdateId()));
 
             } else {
-                System.out.println("Update " + res.getUpdateId() + " has message:" + res.getMessage() + " editedMessage:" + res.getEditedMessage());
+                System.out.println("Update " + res.getUpdateId() + " has message_type:" + res.getMessage() + " editedMessage:" + res.getEditedMessage());
                 System.out.println("Continuing parse...");
             }
 
@@ -196,7 +162,7 @@ public class Bot {
         return updates;
     }
 
-    public String getBotUserName() {
+    /*public String getBotUserName() {
         return botInfo.getResult().getUsername();
     }
 
@@ -206,5 +172,5 @@ public class Bot {
 
     public String getBotName() {
         return botInfo.getResult().getFirstName();
-    }
+    }*/
 }

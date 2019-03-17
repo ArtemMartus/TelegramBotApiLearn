@@ -1,10 +1,10 @@
 package pojo.updates;
 
-import java.io.Serializable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.io.Serializable;
 
 public class Result implements Serializable {
 
@@ -12,7 +12,7 @@ public class Result implements Serializable {
     @SerializedName("update_id")
     @Expose
     private Long updateId;
-    @SerializedName("message")
+    @SerializedName("message_type")
     @Expose
     private Message message;
     @SerializedName("edited_message")
@@ -25,11 +25,6 @@ public class Result implements Serializable {
     public Result() {
     }
 
-    /**
-     * @param message
-     * @param editedMessage
-     * @param updateId
-     */
     public Result(Long updateId, Message message, Message editedMessage) {
         super();
         this.updateId = updateId;
@@ -63,7 +58,7 @@ public class Result implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("updateId", updateId).append("message", message).append("editedMessage", editedMessage).toString();
+        return new ToStringBuilder(this).append("updateId", updateId).append("message_type", message).append("editedMessage", editedMessage).toString();
     }
 
 }

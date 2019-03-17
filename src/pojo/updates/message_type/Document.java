@@ -1,10 +1,11 @@
-package pojo.updates;
-
-import java.io.Serializable;
+package pojo.updates.message_type;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import pojo.updates.Thumb;
+
+import java.io.Serializable;
 
 public class Document implements Serializable {
     private final static long serialVersionUID = 4002195550769258149L;

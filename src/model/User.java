@@ -13,6 +13,16 @@ public class User implements Serializable {
     private String langCode;
     private String userType;
 
+    public User(pojo.updates.User u, pojo.updates.Chat c) {
+        this.isBot = u.isIsBot();
+        this.firstName = u.getFirstName();
+        this.lastName = u.getLastName();
+        this.username = u.getUsername();
+        this.id = u.getId();
+        this.langCode = u.getLanguageCode();
+        this.userType = c.getType();
+    }
+
     public User(Boolean isBot, String firstName, String lastName, String username, Long id, String langCode, String userType) {
         this.isBot = isBot;
         this.firstName = firstName;

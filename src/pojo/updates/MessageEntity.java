@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class MessageEntity implements Serializable {
     private final static long serialVersionUID = -2084008542999613122L;

@@ -1,19 +1,19 @@
-package pojo.updates;
+package pojo.updates.message_type;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
+@SuppressWarnings("WeakerAccess")
 public class VideoNote implements Serializable {
     private final static long serialVersionUID = -808550735677070624L;
     /*
     Done
 
     file_id 	String 	Unique identifier for this file
-    length 	Integer 	Video width and height (diameter of the video message) as defined by sender
+    length 	Integer 	Video width and height (diameter of the video message_type) as defined by sender
     duration 	Integer 	Duration of the video in seconds as defined by sender
     thumb 	PhotoSize 	Optional. Video thumbnail
     file_size 	Integer 	Optional. File size

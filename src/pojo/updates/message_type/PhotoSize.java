@@ -1,12 +1,12 @@
-package pojo.updates;
+package pojo.updates.message_type;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("WeakerAccess")
 public class PhotoSize implements Serializable {
     private final static long serialVersionUID = -2290023503667675L;
     /*

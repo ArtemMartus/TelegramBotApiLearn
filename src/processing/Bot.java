@@ -1,12 +1,20 @@
 package processing;
 
 import com.google.gson.Gson;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
 import pojo.GetMe;
+import pojo.senddata.SendMessagePack;
+import pojo.senddata.SendMessageResult;
 import pojo.updates.Message;
 import pojo.updates.Result;
 import pojo.updates.Update;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,6 +29,7 @@ import java.util.List;
  */
 public class Bot {
     private final String token;
+    private final String api_url = "https://api.telegram.org/bot";
     private final Gson gson;
     /**
      * Basic information about bot
@@ -61,6 +70,43 @@ public class Bot {
     }
 
 
+    public SendMessageResult sendMessage(SendMessagePack message) {
+        HttpClient httpClient = HttpClientBuilder.create().build();
+
+        try {
+
+            URIBuilder b = new URIBuilder(api_url + token + "/sendMessage");
+            b.addParameter("chat_id", message.getChat_id().toString());
+            b.addParameter("text", message.getText());
+            if (message.getReply_to_message_id() != null)
+                b.addParameter("reply_to_message_id", message.getReply_to_message_id().toString());
+
+            URL url = b.build().toURL();
+            HttpPost request = new HttpPost(url.toString());
+            System.out.println("Sending...");
+            System.out.println(request.toString());
+            HttpResponse response = httpClient.execute(request);
+            if (response != null) {
+                InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                InputStreamReader isr = new InputStreamReader(in);
+                BufferedReader reader = new BufferedReader(isr);
+                StringBuilder sb = new StringBuilder();
+                while (reader.ready())
+                    sb.append(reader.readLine());
+
+                System.out.println("Got response " + sb.toString());
+                return gson.fromJson(sb.toString(), SendMessageResult.class);
+            }
+            //handle response here...
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            //handle exception here
+
+        }
+        return null;
+    }
+
     /**
      * @param name
      * Run telegram/token/(name)
@@ -70,7 +116,7 @@ public class Bot {
      * Exceptions about Internet and I\O
      */
     private String runFunction(String name) throws Exception {
-        URL url = new URL("https://api.telegram.org/bot" + token + "/" + name);
+        URL url = new URL(api_url + token + "/" + name);
         URLConnection connection = url.openConnection();
         InputStreamReader isr = new InputStreamReader(connection.getInputStream());
         BufferedReader reader = new BufferedReader(isr);

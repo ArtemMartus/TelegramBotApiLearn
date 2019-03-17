@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-
+//TODO deny wrinting empty messages
 public class SqliteAdapter {
 
     private Connection c = null;

@@ -198,4 +198,20 @@ public class Chat implements Serializable {
                 ", can_set_sticker_set=" + can_set_sticker_set +
                 '}';
     }
+
+    public Chat(Long id, String type, String title, String username, String firstName, String lastName, Boolean all_members_are_administrators, ChatPhoto photo, String description, String invite_link, Message pinned_message, String sticker_set_name, Boolean can_set_sticker_set) {
+        this.id = id;
+        this.type = type;
+        this.title = title;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.all_members_are_administrators = all_members_are_administrators;
+        this.photo = photo;
+        this.description = description;
+        this.invite_link = invite_link;
+        this.pinned_message = pinned_message;
+        this.sticker_set_name = sticker_set_name;
+        this.can_set_sticker_set = can_set_sticker_set;
+    }
 }

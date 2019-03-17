@@ -1,9 +1,10 @@
 package pojo;
 
-import java.io.Serializable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import pojo.updates.User;
+
+import java.io.Serializable;
 
 public class GetMe implements Serializable {
 
@@ -13,7 +14,7 @@ public class GetMe implements Serializable {
     private boolean ok;
     @SerializedName("result")
     @Expose
-    private Result result;
+    private User result;
 
     public boolean isOk() {
         return ok;
@@ -23,11 +24,11 @@ public class GetMe implements Serializable {
         this.ok = ok;
     }
 
-    public Result getResult() {
+    public User getResult() {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(User result) {
         this.result = result;
     }
 

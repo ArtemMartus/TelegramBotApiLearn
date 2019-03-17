@@ -31,6 +31,7 @@ public class Message implements Serializable {
     private Contact contact;
     private Location location;
     private Venue venue;
+    private Chat chat;
 
     public Message(pojo.updates.Message m) {
         this.text = m.getText();
@@ -57,6 +58,8 @@ public class Message implements Serializable {
         this.contact = m.getContact();
         this.location = m.getLocation();
         this.venue = m.getVenue();
+        if (m.getChat() != null)
+            this.chat = new Chat(m.getChat());
 
         List<pojo.updates.MessageEntity> entities = m.getEntities();
         if (entities != null) {
@@ -68,10 +71,11 @@ public class Message implements Serializable {
             this.entities = null;
     }
 
-    public Message(String text, Long date, Long id, List<MessageEntity> entities, User from, User forwardedFrom, Message repliedTo, Chat forwardedFromChat, Audio audio, Document document, Animation animation, Game game, List<PhotoSize> photo, Sticker sticker, Video video, Voice voice, VideoNote video_note, String caption, Contact contact, Location location, Venue venue) {
+    public Message(String text, Long date, Long id, List<MessageEntity> entities, User from, User forwardedFrom, Message repliedTo, Chat forwardedFromChat, Audio audio, Document document, Animation animation, Game game, List<PhotoSize> photo, Sticker sticker, Video video, Voice voice, VideoNote video_note, String caption, Contact contact, Location location, Venue venue, Chat chat) {
         this.text = text;
         this.date = date;
         this.id = id;
+        this.chat = chat;
         this.entities = entities;
         this.from = from;
         this.forwardedFrom = forwardedFrom;
@@ -94,6 +98,14 @@ public class Message implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 
     @Override
@@ -120,6 +132,7 @@ public class Message implements Serializable {
                 ", contact=" + contact +
                 ", location=" + location +
                 ", venue=" + venue +
+                ", chat=" + chat +
                 '}';
     }
 
